@@ -1,9 +1,12 @@
 use eframe::egui::{
-    CentralPanel, Context, FontData, FontDefinitions, Layout, ScrollArea, TextStyle, Ui, Visuals,
+    CentralPanel, Context, FontData, FontDefinitions, Layout, RichText, ScrollArea, Separator,
+    TextStyle, Ui, Visuals,
 };
 use eframe::emath::Align;
-use eframe::epaint::{FontFamily, FontId, Pos2, Vec2};
+use eframe::epaint::{Color32, FontFamily, FontId, Pos2, Vec2};
 use eframe::{run_native, App, CreationContext, NativeOptions};
+
+const PADDING: f32 = 5.0;
 
 struct Headlines {
     articles: Vec<NewsCardData>,
@@ -60,9 +63,19 @@ impl Headlines {
 
     fn render_news_cards(&self, ui: &mut Ui) {
         for a in &self.articles {
-            ui.label(format!("{}", a.title));
-            ui.label(format!("{}", a.url));
-            ui.label(format!("{}", a.description));
+            ui.add_space(PADDING);
+            ui.colored_label(Color32::WHITE, format!("▶ {}", a.title));
+            ui.add_space(PADDING);
+            ui.label(RichText::new(&a.description).text_style(TextStyle::Body));
+
+            ui.add_space(PADDING);
+            ui.style_mut().visuals.hyperlink_color = Color32::LIGHT_BLUE;
+            ui.with_layout(Layout::right_to_left().with_cross_align(Align::Min), |ui| {
+                ui.hyperlink_to("read more ⤴", &a.url)
+            });
+
+            ui.add_space(PADDING);
+            ui.add(Separator::default());
         }
     }
 
@@ -80,9 +93,7 @@ impl Headlines {
 impl App for Headlines {
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
         CentralPanel::default().show(ctx, |ui| {
-            ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
-                ScrollArea::vertical().show(ui, |ui| self.render_news_cards(ui));
-            })
+            ScrollArea::vertical().show(ui, |ui| self.render_news_cards(ui));
         });
     }
 }
