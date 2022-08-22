@@ -1,0 +1,8 @@
+[workspace] 
+
+members = [
+  "newsapi",
+  "headlines"
+]
+
+default-run = "headlines"
