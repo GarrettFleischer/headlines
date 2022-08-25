@@ -1,6 +1,6 @@
 use eframe::egui::{Separator, Ui};
 
-use crate::headlines::constants::PADDING;
+use super::constants::PADDING;
 
 pub fn render_header(ui: &mut Ui) {
     ui.add_space(PADDING);

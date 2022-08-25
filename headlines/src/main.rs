@@ -3,23 +3,14 @@ use eframe::{run_native, NativeOptions};
 
 mod headlines;
 use headlines::Headlines;
-use headlines::NewsCardData;
 
 fn main() {
-    let articles = Vec::from_iter({ 0..20 }.map(|i| {
-        NewsCardData::new(
-            format!("Title: {}", i),
-            format!("Description: {}", i),
-            format!("https://example.com/{}", i),
-        )
-    }));
-
     let mut native_options = NativeOptions::default();
     native_options.initial_window_pos = Some(Pos2::new(600., 10.));
     native_options.initial_window_size = Some(Vec2::new(540., 960.));
     run_native(
         "Headlines",
         native_options,
-        Box::new(|cc| Box::new(Headlines::new(cc, articles))),
+        Box::new(|cc| Box::new(Headlines::new(cc))),
     );
 }
